@@ -4,3 +4,9 @@
 export function Greet(arg1:string):Promise<string>;
 
 export function PickConfigFile():Promise<string>;
+
+export function LoadAtmosData(arg1:string):Promise<Array<{stack:string,component:string}>>;
+
+export function Describe(arg1:string,arg2:string):Promise<string>;
+
+export function RunTerraform(arg1:string,arg2:string,arg3:string):Promise<string>;
