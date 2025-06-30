@@ -1,15 +1,16 @@
 package main
 
 import (
-        "context"
-        "fmt"
-        "path/filepath"
+	"context"
+	"fmt"
+	"path/filepath"
+	"strings"
 
-        "github.com/cloudposse/atmos/internal/exec"
-        "github.com/cloudposse/atmos/pkg/config"
-        "github.com/cloudposse/atmos/pkg/list"
-        "github.com/cloudposse/atmos/pkg/schema"
-        "github.com/wailsapp/wails/v2/pkg/runtime"
+	"github.com/cloudposse/atmos/internal/exec"
+	"github.com/cloudposse/atmos/pkg/config"
+	"github.com/cloudposse/atmos/pkg/list"
+	"github.com/cloudposse/atmos/pkg/schema"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -25,25 +26,26 @@ func NewApp() *App {
 // startup is called when the app starts. The context is saved
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
-        a.ctx = ctx
+	a.ctx = ctx
 }
 
 // PickConfigFile opens a dialog to select the atmos.yaml file and returns the path
 func (a *App) PickConfigFile() string {
-        path, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
-                Title:   "Select atmos.yaml",
-                Filters: []runtime.FileFilter{{DisplayName: "atmos.yaml", Pattern: "atmos.yaml"}},
-        })
-        if err != nil {
-                return ""
-        }
-        return path
+	path, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
+		Title:           "Select atmos.yaml",
+		DefaultFilename: "atmos.yaml",
+		Filters:         []runtime.FileFilter{{DisplayName: "YAML files", Pattern: "*.yaml;*.yml"}},
+	})
+	if err != nil {
+		return ""
+	}
+	return path
 }
 
 // Greet returns a greeting for the given name
 func (a *App) Greet(atmosPath string) string {
-        configAndStacksInfo := schema.ConfigAndStacksInfo{}
-        configAndStacksInfo.AtmosBasePath = filepath.Dir(atmosPath)
+	configAndStacksInfo := schema.ConfigAndStacksInfo{}
+	configAndStacksInfo.AtmosBasePath = filepath.Dir(atmosPath)
 	atmosConfig, err := config.InitCliConfig(configAndStacksInfo, true)
 	if err != nil {
 		return "Error initializing CLI config: " + err.Error()
@@ -57,5 +59,5 @@ func (a *App) Greet(atmosPath string) string {
 	if err != nil {
 		return "Error filtering stacks: " + err.Error()
 	}
-	return fmt.Sprintf("Hello %s, It's show time!", output)
+	return fmt.Sprintf("Hello %s, It's show time!", strings.Join(output, "\n"))
 }
