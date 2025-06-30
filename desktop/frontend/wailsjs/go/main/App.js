@@ -9,3 +9,15 @@ export function Greet(arg1) {
 export function PickConfigFile() {
   return window['go']['main']['App']['PickConfigFile']();
 }
+
+export function LoadAtmosData(arg1) {
+  return window['go']['main']['App']['LoadAtmosData'](arg1);
+}
+
+export function Describe(arg1, arg2) {
+  return window['go']['main']['App']['Describe'](arg1, arg2);
+}
+
+export function RunTerraform(arg1, arg2, arg3) {
+  return window['go']['main']['App']['RunTerraform'](arg1, arg2, arg3);
+}
