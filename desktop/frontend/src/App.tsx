@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import YAML from 'js-yaml'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import './App.css'
 import {
     PickConfigFile,
@@ -140,7 +142,9 @@ function App() {
                             ))}
                         </select>
                     )}
-                    <pre className="describe-box">{displayText}</pre>
+                    <SyntaxHighlighter language="yaml" style={vscDarkPlus} className="describe-box">
+                        {displayText}
+                    </SyntaxHighlighter>
                 </div>
             </div>
         </div>
