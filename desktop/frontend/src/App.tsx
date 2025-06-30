@@ -1,26 +1,27 @@
 import {useState} from 'react';
 import logo from './assets/images/logo-universal.png';
 import './App.css';
-import {Greet} from "../wailsjs/go/main/App";
+import {Greet, PickConfigFile} from "../wailsjs/go/main/App";
 
 function App() {
-    const [resultText, setResultText] = useState("Please enter your name below 👇");
-    const [name, setName] = useState('');
-    const updateName = (e: any) => setName(e.target.value);
+    const [resultText, setResultText] = useState("");
+    const [configPath, setConfigPath] = useState('');
     const updateResultText = (result: string) => setResultText(result);
 
-    function greet() {
-        Greet(name).then(updateResultText);
+    function chooseConfig() {
+        PickConfigFile().then((path: string) => {
+            if (path) {
+                setConfigPath(path);
+                Greet(path).then(updateResultText);
+            }
+        });
     }
 
     return (
         <div id="App">
             <img src={logo} id="logo" alt="logo"/>
-            <div id="result" className="result">{resultText}</div>
-            <div id="input" className="input-box">
-                <input id="name" className="input" onChange={updateName} autoComplete="off" name="input" type="text"/>
-                <button className="btn" onClick={greet}>Greet</button>
-            </div>
+            <button className="btn" onClick={chooseConfig}>Select atmos.yaml</button>
+            <div id="result" className="result console">{resultText}</div>
         </div>
     )
 }
