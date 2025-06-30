@@ -39,7 +39,7 @@ func init() {
 	listCmd.AddCommand(listStacksCmd)
 }
 
-func listStacks(cmd *cobra.Command) ([]string, error) {
+func ListStacks(cmd *cobra.Command) ([]string, error) {
 	componentFlag, _ := cmd.Flags().GetString("component")
 	configAndStacksInfo := schema.ConfigAndStacksInfo{}
 	atmosConfig, err := config.InitCliConfig(configAndStacksInfo, true)
