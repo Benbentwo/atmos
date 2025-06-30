@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import YAML from 'js-yaml'
 import './App.css'
 import {
     PickConfigFile,
@@ -17,6 +18,9 @@ function App() {
     const [selectedStack, setSelectedStack] = useState<string | null>(null)
     const [selectedComponent, setSelectedComponent] = useState<string | null>(null)
     const [describeText, setDescribeText] = useState('')
+    const [describeObj, setDescribeObj] = useState<any>(null)
+    const [sections, setSections] = useState<string[]>([])
+    const [sectionFilter, setSectionFilter] = useState('all')
     const [command, setCommand] = useState('plan')
     const [consoleOut, setConsoleOut] = useState('')
 
@@ -33,12 +37,31 @@ function App() {
         setSelectedStack(stack)
         setSelectedComponent(null)
         setDescribeText('')
+        setDescribeObj(null)
+        setSections([])
+        setSectionFilter('all')
     }
 
     function selectComponent(component: string) {
         if (!selectedStack) return
         setSelectedComponent(component)
-        Describe(selectedStack, component).then(setDescribeText)
+        Describe(selectedStack, component).then(text => {
+            setDescribeText(text)
+            try {
+                const obj = YAML.load(text)
+                if (obj && typeof obj === 'object') {
+                    setDescribeObj(obj)
+                    setSections(Object.keys(obj as any))
+                } else {
+                    setDescribeObj(null)
+                    setSections([])
+                }
+            } catch {
+                setDescribeObj(null)
+                setSections([])
+            }
+            setSectionFilter('all')
+        })
     }
 
     function startCommand() {
@@ -55,6 +78,14 @@ function App() {
             .filter(c => filterComponent === '' || c.includes(filterComponent))
             .sort()
         : []
+
+    let displayText = describeText
+    if (sectionFilter !== 'all' && describeObj) {
+        const part = (describeObj as any)[sectionFilter]
+        if (part !== undefined) {
+            displayText = YAML.dump(part)
+        }
+    }
 
     return (
         <div id="App">
@@ -101,7 +132,15 @@ function App() {
                     {consoleOut && <pre className="console">{consoleOut}</pre>}
                 </div>
                 <div className="right">
-                    <pre className="describe-box">{describeText}</pre>
+                    {sections.length > 0 && (
+                        <select className="form-select mb-2" value={sectionFilter} onChange={e => setSectionFilter(e.target.value)}>
+                            <option value="all">All</option>
+                            {sections.map(s => (
+                                <option key={s} value={s}>{s}</option>
+                            ))}
+                        </select>
+                    )}
+                    <pre className="describe-box">{displayText}</pre>
                 </div>
             </div>
         </div>
