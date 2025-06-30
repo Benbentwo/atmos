@@ -3,24 +3,35 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/cloudposse/atmos/internal/exec"
 	"github.com/cloudposse/atmos/pkg/config"
 	"github.com/cloudposse/atmos/pkg/list"
 	"github.com/cloudposse/atmos/pkg/schema"
+	u "github.com/cloudposse/atmos/pkg/utils"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"gopkg.in/yaml.v3"
 )
 
 // App struct
 type App struct {
-	ctx context.Context
+	ctx        context.Context
+	configPath string
 }
 
 // NewApp creates a new App application struct
 func NewApp() *App {
 	return &App{}
+}
+
+// StackComponent represents a Terraform component in a stack.
+type StackComponent struct {
+	Stack     string `json:"stack"`
+	Component string `json:"component"`
 }
 
 // startup is called when the app starts. The context is saved
@@ -60,4 +71,74 @@ func (a *App) Greet(atmosPath string) string {
 		return "Error filtering stacks: " + err.Error()
 	}
 	return fmt.Sprintf("Hello %s, It's show time!", strings.Join(output, "\n"))
+}
+
+// LoadAtmosData loads stacks and components from the provided atmos.yaml path.
+func (a *App) LoadAtmosData(atmosPath string) ([]StackComponent, error) {
+	a.configPath = atmosPath
+
+	configAndStacksInfo := schema.ConfigAndStacksInfo{}
+	configAndStacksInfo.AtmosBasePath = filepath.Dir(atmosPath)
+	atmosConfig, err := config.InitCliConfig(configAndStacksInfo, true)
+	if err != nil {
+		return nil, err
+	}
+	stacksMap, err := exec.ExecuteDescribeStacks(atmosConfig, "", nil, nil, nil, false, false, false, false, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []StackComponent
+	for stackName := range stacksMap {
+		components, err := list.FilterAndListComponents(stackName, stacksMap)
+		if err != nil {
+			continue
+		}
+		for _, comp := range components {
+			result = append(result, StackComponent{Stack: stackName, Component: comp})
+		}
+	}
+
+	sort.Slice(result, func(i, j int) bool {
+		if result[i].Stack == result[j].Stack {
+			return result[i].Component < result[j].Component
+		}
+		return result[i].Stack < result[j].Stack
+	})
+	return result, nil
+}
+
+// Describe returns the YAML description of the provided stack/component.
+func (a *App) Describe(stack, component string) string {
+	base := filepath.Dir(a.configPath)
+	os.Setenv("ATMOS_BASE_PATH", base)
+	os.Setenv("ATMOS_CLI_CONFIG_PATH", a.configPath)
+	defer func() {
+		os.Unsetenv("ATMOS_BASE_PATH")
+		os.Unsetenv("ATMOS_CLI_CONFIG_PATH")
+	}()
+
+	data, err := exec.ExecuteDescribeComponent(component, stack, true, true, nil)
+	if err != nil {
+		return "Error: " + err.Error()
+	}
+	b, err := yaml.Marshal(data)
+	if err != nil {
+		return "Error: " + err.Error()
+	}
+	return string(b)
+}
+
+// RunTerraform executes a terraform command and returns its output.
+func (a *App) RunTerraform(cmd, stack, component string) string {
+	command := fmt.Sprintf("atmos terraform %s %s -s %s", cmd, component, stack)
+	env := []string{
+		fmt.Sprintf("ATMOS_BASE_PATH=%s", filepath.Dir(a.configPath)),
+		fmt.Sprintf("ATMOS_CLI_CONFIG_PATH=%s", a.configPath),
+	}
+	out, err := u.ExecuteShellAndReturnOutput(command, "terraform-"+cmd, filepath.Dir(a.configPath), env, false)
+	if err != nil {
+		return "Error: " + err.Error()
+	}
+	return out
 }
