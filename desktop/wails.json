@@ -1,13 +1,28 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "desktop",
-  "outputfilename": "desktop",
+  "name": "Atmos Desktop",
+  "outputfilename": "atmos",
   "frontend:install": "npm install",
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
+  "icon": "frontend/src/assets/images/appicon.png",
   "author": {
     "name": "Benjamin Smith",
     "email": "ben.smith.developer@gmail.com"
-  }
+  },
+  "info": {
+    "companyName": "Cloud Posse",
+    "productName": "Atmos Desktop",
+    "productVersion": "0.1.0"
+  },
+  "fileAssociations": [
+    {
+      "ext": "yaml",
+      "name": "atmos",
+      "description": "Atmos Configuration File",
+      "iconName": "appicon",
+      "role": "Editor"
+    }
+  ]
 }
