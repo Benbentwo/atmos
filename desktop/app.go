@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -109,6 +110,15 @@ func (a *App) LoadAtmosData(atmosPath string) ([]StackComponent, error) {
 
 // Describe returns the YAML description of the provided stack/component.
 func (a *App) Describe(stack, component string) string {
+	base := filepath.Dir(a.configPath)
+	os.Setenv("ATMOS_BASE_PATH", base)
+	os.Setenv("ATMOS_CLI_CONFIG_PATH", a.configPath)
+	defer func() {
+		os.Unsetenv("ATMOS_BASE_PATH")
+		os.Unsetenv("ATMOS_CLI_CONFIG_PATH")
+	}()
+
+
 	data, err := exec.ExecuteDescribeComponent(component, stack, true, true, nil)
 	if err != nil {
 		return "Error: " + err.Error()
@@ -123,7 +133,11 @@ func (a *App) Describe(stack, component string) string {
 // RunTerraform executes a terraform command and returns its output.
 func (a *App) RunTerraform(cmd, stack, component string) string {
 	command := fmt.Sprintf("atmos terraform %s %s -s %s", cmd, component, stack)
-	out, err := u.ExecuteShellAndReturnOutput(command, "terraform-"+cmd, filepath.Dir(a.configPath), nil, false)
+	env := []string{
+		fmt.Sprintf("ATMOS_BASE_PATH=%s", filepath.Dir(a.configPath)),
+		fmt.Sprintf("ATMOS_CLI_CONFIG_PATH=%s", a.configPath),
+	}
+	out, err := u.ExecuteShellAndReturnOutput(command, "terraform-"+cmd, filepath.Dir(a.configPath), env, false)
 	if err != nil {
 		return "Error: " + err.Error()
 	}
