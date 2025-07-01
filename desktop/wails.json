@@ -14,5 +14,14 @@
     "companyName": "Cloud Posse",
     "productName": "Atmos Desktop",
     "productVersion": "0.1.0"
-  }
+  },
+  "fileAssociations": [
+    {
+      "ext": "yaml",
+      "name": "atmos",
+      "description": "Atmos Configuration File",
+      "iconName": "appicon",
+      "role": "Editor"
+    }
+  ]
 }
