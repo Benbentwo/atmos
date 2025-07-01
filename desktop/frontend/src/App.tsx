@@ -50,38 +50,40 @@ function App() {
                 <input value={configPath} readOnly placeholder="Select atmos.yaml"/>
                 <button className="btn" onClick={chooseConfig}>Select atmos.yaml</button>
             </div>
-            <div className="main">
-                <div className="left">
-                    <select value={command} onChange={e => setCommand(e.target.value)}>
-                        <option value="plan">plan</option>
-                        <option value="apply">apply</option>
-                    </select>
-                </div>
-                <div className="center">
-                    <div className="filters">
-                        <input placeholder="Filter stack" value={filterStack} onChange={e => setFilterStack(e.target.value)}/>
-                        <input placeholder="Filter component" value={filterComponent} onChange={e => setFilterComponent(e.target.value)}/>
+            {configPath && (
+                <div className="main">
+                    <div className="left">
+                        <select value={command} onChange={e => setCommand(e.target.value)}>
+                            <option value="plan">plan</option>
+                            <option value="apply">apply</option>
+                        </select>
                     </div>
-                    <table className="items">
-                        <thead>
-                        <tr><th>Stack</th><th>Component</th></tr>
-                        </thead>
-                        <tbody>
-                        {filtered.map((it, idx) => (
-                            <tr key={idx} onClick={() => selectRow(it)} className={selected===it?"selected":""}>
-                                <td>{it.stack}</td>
-                                <td>{it.component}</td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
-                    <button className="btn" onClick={startCommand}>Start</button>
-                    <pre className="console">{consoleOut}</pre>
+                    <div className="center">
+                        <div className="filters">
+                            <input placeholder="Filter stack" value={filterStack} onChange={e => setFilterStack(e.target.value)}/>
+                            <input placeholder="Filter component" value={filterComponent} onChange={e => setFilterComponent(e.target.value)}/>
+                        </div>
+                        <table className="items">
+                            <thead>
+                            <tr><th>Stack</th><th>Component</th></tr>
+                            </thead>
+                            <tbody>
+                            {filtered.map((it, idx) => (
+                                <tr key={idx} onClick={() => selectRow(it)} className={selected===it?"selected":""}>
+                                    <td>{it.stack}</td>
+                                    <td>{it.component}</td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                        <button className="btn" onClick={startCommand}>Start</button>
+                        <pre className="console">{consoleOut}</pre>
+                    </div>
+                    <div className="right">
+                        <pre>{describeText}</pre>
+                    </div>
                 </div>
-                <div className="right">
-                    <pre>{describeText}</pre>
-                </div>
-            </div>
+            )}
         </div>
     )
 }
