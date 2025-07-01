@@ -5,6 +5,7 @@ go 1.24.4
 require (
 	github.com/cloudposse/atmos v1.181.0
 	github.com/wailsapp/wails/v2 v2.10.1
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -340,7 +341,6 @@ require (
 	gopkg.in/op/go-logging.v1 v1.0.0-20160211212156-b2cb9fa56473 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 	inet.af/netaddr v0.0.0-20230525184311-b8eac61e914a // indirect
 	k8s.io/client-go v0.32.3 // indirect
 	k8s.io/utils v0.0.0-20241104100929-3ea5e8cea738 // indirect
