@@ -43,9 +43,8 @@ func (a *App) startup(ctx context.Context) {
 // PickConfigFile opens a dialog to select the atmos.yaml file and returns the path
 func (a *App) PickConfigFile() string {
 	path, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
-		Title:           "Select atmos.yaml",
-		DefaultFilename: "atmos.yaml",
-		Filters:         []runtime.FileFilter{{DisplayName: "YAML files", Pattern: "*.yaml;*.yml"}},
+		Title:   "Select atmos.yaml",
+		Filters: []runtime.FileFilter{{DisplayName: "YAML files", Pattern: "*.yaml;*.yml"}},
 	})
 	if err != nil {
 		return ""
@@ -117,7 +116,6 @@ func (a *App) Describe(stack, component string) string {
 		os.Unsetenv("ATMOS_BASE_PATH")
 		os.Unsetenv("ATMOS_CLI_CONFIG_PATH")
 	}()
-
 
 	data, err := exec.ExecuteDescribeComponent(component, stack, true, true, nil)
 	if err != nil {
