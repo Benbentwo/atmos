@@ -100,6 +100,16 @@ function App() {
         }
     }
 
+    function startCommand() {
+        if (!selected) return
+        RunTerraform(command, selected.stack, selected.component).then(setConsoleOut)
+    }
+
+    const filtered = items.filter(i =>
+        (filterStack === '' || i.stack.includes(filterStack)) &&
+        (filterComponent === '' || i.component.includes(filterComponent))
+    )
+
     return (
         <div id="App">
             <div className="top-bar d-flex gap-2">

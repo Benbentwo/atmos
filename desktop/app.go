@@ -118,6 +118,7 @@ func (a *App) Describe(stack, component string) string {
 		os.Unsetenv("ATMOS_CLI_CONFIG_PATH")
 	}()
 
+
 	data, err := exec.ExecuteDescribeComponent(component, stack, true, true, nil)
 	if err != nil {
 		return "Error: " + err.Error()
