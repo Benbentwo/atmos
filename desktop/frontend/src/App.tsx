@@ -26,11 +26,6 @@ function App() {
     const [command, setCommand] = useState('plan')
     const [consoleOut, setConsoleOut] = useState('')
 
-    useEffect(() => {
-        chooseConfig()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
     function chooseConfig() {
         PickConfigFile().then((path: string) => {
             if (path) {
@@ -100,11 +95,6 @@ function App() {
         }
     }
 
-    function startCommand() {
-        if (!selected) return
-        RunTerraform(command, selected.stack, selected.component).then(setConsoleOut)
-    }
-
     const filtered = items.filter(i =>
         (filterStack === '' || i.stack.includes(filterStack)) &&
         (filterComponent === '' || i.component.includes(filterComponent))
@@ -117,6 +107,7 @@ function App() {
                 <button className="btn btn-primary" onClick={chooseConfig}>Select atmos.yaml</button>
                 <button className="btn btn-secondary" onClick={refreshData}>Refresh</button>
             </div>
+            {configPath && (
             <div className="main">
                 <div className="left">
                     <select className="form-select mb-2" value={command} onChange={e => setCommand(e.target.value)}>
@@ -169,6 +160,7 @@ function App() {
                     </SyntaxHighlighter>
                 </div>
             </div>
+            )}
         </div>
     )
 }
