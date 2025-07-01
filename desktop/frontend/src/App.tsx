@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import YAML from 'js-yaml'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
@@ -26,6 +26,11 @@ function App() {
     const [command, setCommand] = useState('plan')
     const [consoleOut, setConsoleOut] = useState('')
 
+    useEffect(() => {
+        chooseConfig()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     function chooseConfig() {
         PickConfigFile().then((path: string) => {
             if (path) {
@@ -33,6 +38,12 @@ function App() {
                 LoadAtmosData(path).then(setItems)
             }
         })
+    }
+
+    function refreshData() {
+        if (configPath) {
+            LoadAtmosData(configPath).then(setItems)
+        }
     }
 
     function selectStack(stack: string) {
@@ -91,9 +102,10 @@ function App() {
 
     return (
         <div id="App">
-            <div className="top-bar d-flex">
-                <input className="form-control me-2" value={configPath} readOnly placeholder="Select atmos.yaml"/>
+            <div className="top-bar d-flex gap-2">
+                <input className="form-control" value={configPath} readOnly placeholder="Select atmos.yaml"/>
                 <button className="btn btn-primary" onClick={chooseConfig}>Select atmos.yaml</button>
+                <button className="btn btn-secondary" onClick={refreshData}>Refresh</button>
             </div>
             <div className="main">
                 <div className="left">
