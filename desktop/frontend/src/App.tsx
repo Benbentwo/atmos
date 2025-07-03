@@ -23,6 +23,7 @@ function App() {
     const [sectionFilter, setSectionFilter] = useState('all')
     const [command, setCommand] = useState('plan')
     const [consoleOut, setConsoleOut] = useState('')
+    const [rightPanelCollapsed, setRightPanelCollapsed] = useState(false)
 
     function chooseConfig() {
         PickConfigFile().then((path: string) => {
@@ -106,7 +107,7 @@ function App() {
             <div className="main-content">
                 <div className="sidebar">
                     <select 
-                        className="sidebar-select" 
+                        className="sidebar-select hover:nav-gradient" 
                         value={command} 
                         onChange={e => setCommand(e.target.value)}
                     >
@@ -137,28 +138,40 @@ function App() {
                         />
                     </div>
                     <div className="grid-container">
-                        <ul className="list">
-                            {stacks.map(s => (
-                                <li 
-                                    key={s} 
-                                    onClick={() => selectStack(s)} 
-                                    className={`list-item ${selectedStack===s ? "selected" : ""}`}
-                                >
-                                    {s}
-                                </li>
-                            ))}
-                        </ul>
-                        <ul className="list">
-                            {components.map(c => (
-                                <li 
-                                    key={c} 
-                                    onClick={() => selectComponent(c)} 
-                                    className={`list-item ${selectedComponent===c ? "selected" : ""}`}
-                                >
-                                    {c}
-                                </li>
-                            ))}
-                        </ul>
+                        <div className="list">
+                            <div className="list-title">
+                                <span>Stacks</span>
+                                <span>{stacks.length}</span>
+                            </div>
+                            <div className="list-content">
+                                {stacks.map(s => (
+                                    <div 
+                                        key={s} 
+                                        onClick={() => selectStack(s)} 
+                                        className={`list-item ${selectedStack===s ? "selected" : ""}`}
+                                    >
+                                        {s}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="list">
+                            <div className="list-title">
+                                <span>Components</span>
+                                <span>{components.length}</span>
+                            </div>
+                            <div className="list-content">
+                                {components.map(c => (
+                                    <div 
+                                        key={c} 
+                                        onClick={() => selectComponent(c)} 
+                                        className={`list-item ${selectedComponent===c ? "selected" : ""}`}
+                                    >
+                                        {c}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                     {consoleOut && (
                         <pre className="console">
@@ -166,22 +179,34 @@ function App() {
                         </pre>
                     )}
                 </div>
-                <div className="right-panel">
-                    {sections.length > 0 && (
-                        <select 
-                            className="section-select" 
-                            value={sectionFilter} 
-                            onChange={e => setSectionFilter(e.target.value)}
-                        >
-                            <option value="all">All</option>
-                            {sections.map(s => (
-                                <option key={s} value={s}>{s}</option>
-                            ))}
-                        </select>
+                <div className={`right-panel ${rightPanelCollapsed ? 'collapsed' : ''}`}>
+                    <div 
+                        className="toggle-panel" 
+                        onClick={() => setRightPanelCollapsed(!rightPanelCollapsed)}
+                    >
+                        <span className={`toggle-panel-icon ${rightPanelCollapsed ? 'collapsed' : ''}`}>
+                            {rightPanelCollapsed ? '›' : '‹'}
+                        </span>
+                    </div>
+                    {!rightPanelCollapsed && (
+                        <>
+                            {sections.length > 0 && (
+                                <select 
+                                    className="section-select" 
+                                    value={sectionFilter} 
+                                    onChange={e => setSectionFilter(e.target.value)}
+                                >
+                                    <option value="All">All</option>
+                                    {sections.map(s => (
+                                        <option key={s} value={s}>{s}</option>
+                                    ))}
+                                </select>
+                            )}
+                            <pre className="code-display">
+                                {displayText}
+                            </pre>
+                        </>
                     )}
-                    <pre className="code-display">
-                        {displayText}
-                    </pre>
                 </div>
             </div>
         </div>
