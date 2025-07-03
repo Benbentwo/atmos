@@ -1,8 +1,9 @@
 import React from 'react'
 import {createRoot} from 'react-dom/client'
-import './style.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import App from './App'
+import './index.css'
+import './style.css'
+import './tailwind.css'
 
 const container = document.getElementById('root')
 

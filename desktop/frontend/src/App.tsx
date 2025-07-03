@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import YAML from 'js-yaml'
-import './App.css'
+
 import {
     PickConfigFile,
     LoadAtmosData,
@@ -88,59 +88,100 @@ function App() {
     }
 
     return (
-        <div id="App">
-            <div className="top-bar d-flex">
-                <input className="form-control me-2" value={configPath} readOnly placeholder="Select atmos.yaml"/>
-                <button className="btn btn-primary" onClick={chooseConfig}>Select atmos.yaml</button>
+        <div className="app-container">
+            <div className="header">
+                <input 
+                    className="header-input" 
+                    value={configPath} 
+                    readOnly 
+                    placeholder="Select atmos.yaml"
+                />
+                <button 
+                    className="header-button" 
+                    onClick={chooseConfig}
+                >
+                    Select atmos.yaml
+                </button>
             </div>
-            <div className="main">
-                <div className="left">
-                    <select className="form-select mb-2" value={command} onChange={e => setCommand(e.target.value)}>
+            <div className="main-content">
+                <div className="sidebar">
+                    <select 
+                        className="sidebar-select" 
+                        value={command} 
+                        onChange={e => setCommand(e.target.value)}
+                    >
                         <option value="plan">plan</option>
                         <option value="apply">apply</option>
                     </select>
-                    <button className="btn btn-success" disabled={!selectedStack || !selectedComponent} onClick={startCommand}>Start</button>
+                    <button
+                        className="sidebar-button"
+                        onClick={startCommand}
+                        disabled={!selectedStack || !selectedComponent}
+                    >
+                        Start
+                    </button>
                 </div>
-                <div className="center">
-                    <div className="filters mb-2 d-flex gap-2">
-                        <input className="form-control" placeholder="Filter stack" value={filterStack} onChange={e => setFilterStack(e.target.value)}/>
-                        <input className="form-control" placeholder="Filter component" value={filterComponent} onChange={e => setFilterComponent(e.target.value)}/>
+                <div className="content">
+                    <div className="filter-container">
+                        <input 
+                            className="filter-input" 
+                            placeholder="Filter stack" 
+                            value={filterStack} 
+                            onChange={e => setFilterStack(e.target.value)}
+                        />
+                        <input 
+                            className="filter-input" 
+                            placeholder="Filter component" 
+                            value={filterComponent} 
+                            onChange={e => setFilterComponent(e.target.value)}
+                        />
                     </div>
-                    <table className="items table table-sm">
-                        <thead>
-                        <tr><th>Stack</th><th>Component</th></tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <ul className="list list-group">
-                                    {stacks.map(s => (
-                                        <li key={s} onClick={() => selectStack(s)} className={`list-group-item ${selectedStack===s?"active":""}`}>{s}</li>
-                                    ))}
-                                </ul>
-                            </td>
-                            <td>
-                                <ul className="list list-group">
-                                    {components.map(c => (
-                                        <li key={c} onClick={() => selectComponent(c)} className={`list-group-item ${selectedComponent===c?"active":""}`}>{c}</li>
-                                    ))}
-                                </ul>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    {consoleOut && <pre className="console">{consoleOut}</pre>}
+                    <div className="grid-container">
+                        <ul className="list">
+                            {stacks.map(s => (
+                                <li 
+                                    key={s} 
+                                    onClick={() => selectStack(s)} 
+                                    className={`list-item ${selectedStack===s ? "selected" : ""}`}
+                                >
+                                    {s}
+                                </li>
+                            ))}
+                        </ul>
+                        <ul className="list">
+                            {components.map(c => (
+                                <li 
+                                    key={c} 
+                                    onClick={() => selectComponent(c)} 
+                                    className={`list-item ${selectedComponent===c ? "selected" : ""}`}
+                                >
+                                    {c}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    {consoleOut && (
+                        <pre className="console">
+                            {consoleOut}
+                        </pre>
+                    )}
                 </div>
-                <div className="right">
+                <div className="right-panel">
                     {sections.length > 0 && (
-                        <select className="form-select mb-2" value={sectionFilter} onChange={e => setSectionFilter(e.target.value)}>
+                        <select 
+                            className="section-select" 
+                            value={sectionFilter} 
+                            onChange={e => setSectionFilter(e.target.value)}
+                        >
                             <option value="all">All</option>
                             {sections.map(s => (
                                 <option key={s} value={s}>{s}</option>
                             ))}
                         </select>
                     )}
-                    <pre className="describe-box">{displayText}</pre>
+                    <pre className="code-display">
+                        {displayText}
+                    </pre>
                 </div>
             </div>
         </div>
