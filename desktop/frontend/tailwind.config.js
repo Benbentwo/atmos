@@ -6,8 +6,6 @@ import defaultTheme from "tailwindcss/defaultTheme";
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@workspace/ui/index.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@workspace/ui/src/*.{js,ts,jsx,tsx,mdx}"
   ],
   plugins: [
     sharedConfig,

@@ -1,6 +1,12 @@
-{
+{  
+  "extends": "./src/packages/typescript-config/base.json",
+
   "compilerOptions": {
     "target": "ESNext",
+    "paths": {
+      "@tailwindcss/*": ["./node_modules/@tailwindcss/*"],
+      "@/*": ["./src/*"]
+    },
     "useDefineForClassFields": true,
     "lib": [
       "DOM",
@@ -14,7 +20,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -26,6 +32,6 @@
   "references": [
     {
       "path": "./tsconfig.node.json"
-    }
+    } 
   ]
 }
