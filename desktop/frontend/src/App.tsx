@@ -90,7 +90,7 @@ function App() {
     return (
         <div id="App" className="h-screen flex flex-col">
             <div className="flex gap-2 p-4 bg-cpblue">
-                <input className="flex-grow px-2 py-1 rounded bg-white text-black" value={configPath} readOnly placeholder="Select atmos.yaml"/>
+                <input className="hs-input flex-grow px-2 py-1 rounded bg-white text-black" value={configPath} readOnly placeholder="Select atmos.yaml"/>
                 <button className="px-4 py-1 bg-cpnavy text-white rounded" onClick={chooseConfig}>Select atmos.yaml</button>
             </div>
             <div className="flex flex-1 overflow-hidden">

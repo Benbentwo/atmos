@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/oxide": "^4.1.11",
     "@tailwindcss/vite": "^4.1.11",
     "js-yaml": "^4.1.0",
     "react": "^18.2.0",
