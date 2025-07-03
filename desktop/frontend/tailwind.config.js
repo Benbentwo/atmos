@@ -1,5 +1,5 @@
 import typography from "@tailwindcss/typography";
-import sharedConfig from "./src/tailwind-config";
+import sharedConfig from "./src/packages/tailwind-config";
 import defaultTheme from "tailwindcss/defaultTheme";
 
 /** @type {Pick<import('tailwindcss').Config, "content" | "theme">} */
