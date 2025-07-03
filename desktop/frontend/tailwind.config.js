@@ -4,6 +4,12 @@ export default {
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
+  safelist: [
+    'bg-cpnavy',
+    'bg-cpblue',
+    'text-cpnavy',
+    'text-cpblue'
+  ],
   theme: {
     extend: {
       colors: {

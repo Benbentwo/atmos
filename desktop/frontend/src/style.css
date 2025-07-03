@@ -14,3 +14,10 @@ body {
   margin: 0;
   font-family: 'Nunito', ui-sans-serif, system-ui;
 }
+
+@layer utilities {
+  .bg-cpnavy { background-color: #1B2636; }
+  .bg-cpblue { background-color: #0052CC; }
+  .text-cpnavy { color: #1B2636; }
+  .text-cpblue { color: #0052CC; }
+}
