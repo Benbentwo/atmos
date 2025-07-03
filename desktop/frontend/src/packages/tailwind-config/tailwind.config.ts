@@ -1,7 +1,6 @@
-import type { Config } from "tailwindcss";
-
-// We want each appp to be responsible for its own content.
-const config: Omit<Config, "content"> = {
+// We want each app to be responsible for its own content.
+const config = {
+  // Type is omitted to avoid TypeScript errors with TailwindCSS v4
   darkMode: "class",
   theme: {
     container: {

@@ -7,6 +7,8 @@
       "@tailwindcss/*": ["./node_modules/@tailwindcss/*"],
       "@/*": ["./src/*"]
     },
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "types": [],
     "useDefineForClassFields": true,
     "lib": [
       "DOM",
@@ -27,7 +29,11 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src",
+    "src/types",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx"
   ],
   "references": [
     {
