@@ -88,48 +88,100 @@ function App() {
     }
 
     return (
-        <div id="App" className="h-screen flex flex-col">
-            <div className="flex gap-2 p-4 bg-cpblue">
-                <input className="hs-input flex-grow px-2 py-1 rounded bg-white text-black" value={configPath} readOnly placeholder="Select atmos.yaml"/>
-                <button className="px-4 py-1 bg-cpnavy text-white rounded" onClick={chooseConfig}>Select atmos.yaml</button>
+        <div className="app-container">
+            <div className="header">
+                <input 
+                    className="header-input" 
+                    value={configPath} 
+                    readOnly 
+                    placeholder="Select atmos.yaml"
+                />
+                <button 
+                    className="header-button" 
+                    onClick={chooseConfig}
+                >
+                    Select atmos.yaml
+                </button>
             </div>
-            <div className="flex flex-1 overflow-hidden">
-                <div className="w-32 p-2 flex flex-col gap-2">
-                    <select className="p-1 text-sm rounded text-black" value={command} onChange={e => setCommand(e.target.value)}>
+            <div className="main-content">
+                <div className="sidebar">
+                    <select 
+                        className="sidebar-select" 
+                        value={command} 
+                        onChange={e => setCommand(e.target.value)}
+                    >
                         <option value="plan">plan</option>
                         <option value="apply">apply</option>
                     </select>
-                    <button className="px-2 py-1 bg-green-600 rounded disabled:opacity-50" disabled={!selectedStack || !selectedComponent} onClick={startCommand}>Start</button>
+                    <button
+                        className="sidebar-button"
+                        onClick={startCommand}
+                        disabled={!selectedStack || !selectedComponent}
+                    >
+                        Start
+                    </button>
                 </div>
-                <div className="flex-1 p-2 overflow-auto">
-                    <div className="flex gap-2 mb-2">
-                        <input className="flex-grow px-2 py-1 rounded text-black" placeholder="Filter stack" value={filterStack} onChange={e => setFilterStack(e.target.value)}/>
-                        <input className="flex-grow px-2 py-1 rounded text-black" placeholder="Filter component" value={filterComponent} onChange={e => setFilterComponent(e.target.value)}/>
+                <div className="content">
+                    <div className="filter-container">
+                        <input 
+                            className="filter-input" 
+                            placeholder="Filter stack" 
+                            value={filterStack} 
+                            onChange={e => setFilterStack(e.target.value)}
+                        />
+                        <input 
+                            className="filter-input" 
+                            placeholder="Filter component" 
+                            value={filterComponent} 
+                            onChange={e => setFilterComponent(e.target.value)}
+                        />
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
-                        <ul className="border rounded divide-y">
+                    <div className="grid-container">
+                        <ul className="list">
                             {stacks.map(s => (
-                                <li key={s} onClick={() => selectStack(s)} className={`px-2 py-1 cursor-pointer ${selectedStack===s?"bg-cpblue text-white":"hover:bg-slate-700"}`}>{s}</li>
+                                <li 
+                                    key={s} 
+                                    onClick={() => selectStack(s)} 
+                                    className={`list-item ${selectedStack===s ? "selected" : ""}`}
+                                >
+                                    {s}
+                                </li>
                             ))}
                         </ul>
-                        <ul className="border rounded divide-y">
+                        <ul className="list">
                             {components.map(c => (
-                                <li key={c} onClick={() => selectComponent(c)} className={`px-2 py-1 cursor-pointer ${selectedComponent===c?"bg-cpblue text-white":"hover:bg-slate-700"}`}>{c}</li>
+                                <li 
+                                    key={c} 
+                                    onClick={() => selectComponent(c)} 
+                                    className={`list-item ${selectedComponent===c ? "selected" : ""}`}
+                                >
+                                    {c}
+                                </li>
                             ))}
                         </ul>
                     </div>
-                    {consoleOut && <pre className="mt-2 bg-black text-green-500 p-2 max-h-72 overflow-auto">{consoleOut}</pre>}
+                    {consoleOut && (
+                        <pre className="console">
+                            {consoleOut}
+                        </pre>
+                    )}
                 </div>
-                <div className="w-1/2 p-2 bg-slate-800 overflow-auto">
+                <div className="right-panel">
                     {sections.length > 0 && (
-                        <select className="mb-2 p-1 text-black rounded" value={sectionFilter} onChange={e => setSectionFilter(e.target.value)}>
+                        <select 
+                            className="section-select" 
+                            value={sectionFilter} 
+                            onChange={e => setSectionFilter(e.target.value)}
+                        >
                             <option value="all">All</option>
                             {sections.map(s => (
                                 <option key={s} value={s}>{s}</option>
                             ))}
                         </select>
                     )}
-                    <pre className="whitespace-pre-wrap text-left">{displayText}</pre>
+                    <pre className="code-display">
+                        {displayText}
+                    </pre>
                 </div>
             </div>
         </div>
