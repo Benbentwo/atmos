@@ -16,6 +16,7 @@
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/js-yaml": "^4.0.9",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
