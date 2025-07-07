@@ -131,14 +131,18 @@ func (a *App) Describe(stack, component string) string {
 
 // RunTerraform executes a terraform command and returns its output.
 func (a *App) RunTerraform(cmd, stack, component string) string {
-	command := fmt.Sprintf("atmos terraform %s %s -s %s", cmd, component, stack)
+	// command := fmt.Sprintf("atmos terraform %s %s -s %s", cmd, component, stack)
 	env := []string{
 		fmt.Sprintf("ATMOS_BASE_PATH=%s", filepath.Dir(a.configPath)),
 		fmt.Sprintf("ATMOS_CLI_CONFIG_PATH=%s", a.configPath),
 	}
-	out, err := u.ExecuteShellAndReturnOutput(command, "terraform-"+cmd, filepath.Dir(a.configPath), env, false)
+	out, err := u.ExecuteShellAndReturnOutput("aws sts get-caller-identity", "aws-debug", filepath.Dir(a.configPath), env, false)
 	if err != nil {
 		return "Error: " + err.Error()
 	}
+	// out, err := u.ExecuteShellAndReturnOutput(command, "terraform-"+cmd, filepath.Dir(a.configPath), env, false)
+	// if err != nil {
+	// 	return "Error: " + err.Error()
+	// }
 	return out
 }
