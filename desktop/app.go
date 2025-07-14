@@ -8,6 +8,9 @@ import (
 	"sort"
 	"strings"
 
+	awsconfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
+
 	"github.com/cloudposse/atmos/internal/exec"
 	"github.com/cloudposse/atmos/pkg/config"
 	"github.com/cloudposse/atmos/pkg/list"
@@ -141,4 +144,19 @@ func (a *App) RunTerraform(cmd, stack, component string) string {
 		return "Error: " + err.Error()
 	}
 	return out
+}
+
+// AuthenticateAWS tests AWS credentials for the provided profile.
+func (a *App) AuthenticateAWS(profile string) string {
+	ctx := context.Background()
+	cfg, err := awsconfig.LoadDefaultConfig(ctx, awsconfig.WithSharedConfigProfile(profile))
+	if err != nil {
+		return "Error: " + err.Error()
+	}
+	client := sts.NewFromConfig(cfg)
+	out, err := client.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
+	if err != nil {
+		return "Error: " + err.Error()
+	}
+	return fmt.Sprintf("Authenticated as %s", *out.Arn)
 }

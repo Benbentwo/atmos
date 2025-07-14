@@ -21,3 +21,7 @@ export function PickConfigFile() {
 export function RunTerraform(arg1, arg2, arg3) {
   return window['go']['main']['App']['RunTerraform'](arg1, arg2, arg3);
 }
+
+export function AuthenticateAWS(arg1) {
+  return window['go']['main']['App']['AuthenticateAWS'](arg1);
+}

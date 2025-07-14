@@ -11,3 +11,5 @@ export function LoadAtmosData(arg1:string):Promise<Array<main.StackComponent>>;
 export function PickConfigFile():Promise<string>;
 
 export function RunTerraform(arg1:string,arg2:string,arg3:string):Promise<string>;
+
+export function AuthenticateAWS(arg1:string):Promise<string>;
