@@ -50,11 +50,10 @@ func ExecuteAwsAuthCommand(cmd *cobra.Command, args []string) error {
 
 		// Simple Picker
 		items := []string{}
-		for k, _ := range AwsAuth {
+		for k := range AwsAuth {
 			items = append(items, k)
 		}
 		choose, err := picker.NewSimplePicker("Choose an AwsAuth Config", items).Choose()
-
 		if err != nil {
 			return err
 		}
@@ -72,7 +71,6 @@ func ExecuteAwsAuth(alias string, config schema.AwsAuthConfig) error {
 	store := authstore.NewKeyringAuthStore()
 	keyringKey := fmt.Sprintf("%s-%s", alias, config.Profile)
 	cfg, err := awsconfig.LoadDefaultConfig(ctx, awsconfig.WithRegion(config.Region))
-
 	if err != nil {
 		panic(fmt.Errorf("failed to load config: %w", err))
 	}
@@ -141,7 +139,7 @@ aws_access_key_id=%s
 aws_secret_access_key=%s
 aws_session_token=%s
 `, config.Profile, *roleCredentials.RoleCredentials.AccessKeyId, *roleCredentials.RoleCredentials.SecretAccessKey, *roleCredentials.RoleCredentials.SessionToken)
-	err = os.WriteFile(awsCredentialsPath, []byte(content), 0600)
+	err = os.WriteFile(awsCredentialsPath, []byte(content), 0o600)
 	if err != nil {
 		return fmt.Errorf("failed to write credentials file: %w", err)
 	}
